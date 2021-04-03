@@ -1,18 +1,26 @@
-# Getting Started with Create React App
+# MongoDB
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+User schema (id, name, email)
 
-## Available Scripts
+Event schema (id, url, time_slot_id)
 
-In the project directory, you can run:
+Slot schema (id, description, time_stamp, duration, is_archived)
 
-### `yarn start`
+User-time-slot schema (user_id, slot_id)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Time Planning
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+React Component Dev - between 1 - 2 days
+
+API Development - between 3 - 5 days
+
+DB Design - between 2 - 3 days
+
+### Additional thoughts on auto generating new meeting schedules based on user demand.
+
+Using the threshold to track and monitor user polls of which 7 days system archives old slots
+
+Completing a survey at the end of some classes to understand more on user behaviour, it could be a simple five star rating
 
 ### `yarn test`
 
