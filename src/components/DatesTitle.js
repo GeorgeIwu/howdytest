@@ -10,7 +10,7 @@ const Container = styled.div`
 const TimeLeft = styled.span`
   display: flex;
   flex:direction: row;
-  width: calc(100%/9 * 2);
+  width: calc(100%/8 * 2);
   height: 50px;
   padding: 15px;
   border: 1px solid #000;
