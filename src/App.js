@@ -1,52 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import useDate from './api/useDate'
-import useSlot from './api/useSlot'
-import Cell from './components/Cell';
-import DatesTitle from './components/DatesTitle';
-import WeekTitle from './components/WeekTitle.js';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import useGroups from "./useGroups"
 
 const Container = styled.div`
-  width: 100%;
-`;
-
-const Cells = styled.div`
   display: flex;
-  flex-direction: column,
-  width: 100%;
-`;
+  flex-direction: column;
+  padding: 20px;
+  text-align: center;
+`
 
-const USER = { id: 9828929, name: "john", email: "john_doe@gmail.com" }
-const MAX_TIME_RANGE = 8
-const FROM_DATE = new Date("Mon Apr 5 00:00:00 +0000 2021")
+const Search = styled.input`
+  border: 1px solid black;
+  width: 300px;
+  height: 20px;
+`
 
 const App = () => {
-  const {slots, onAdd} = useSlot(FROM_DATE)
-  const {weekDates, formatDate} = useDate(FROM_DATE);
-  const [page, setPage] = useState(0)
-  const [pageDates, setPageDates] = useState(weekDates)
+  const searchRef = useRef()
+  const {groups, onSearch} = useGroups()
+  const [currentSearch, setCurrentSearch] = useState("")
+  const isEmpty = groups.length < 1
+  const inValidInput = currentSearch.length < 3
 
   useEffect(() => {
-    const dates = weekDates.map(({ dates, ...rest }) => {
-      const startIndex = page * MAX_TIME_RANGE
-      const newDates =  dates.slice(startIndex, startIndex +  MAX_TIME_RANGE)
-      return { dates: newDates, ...rest}
-    })
+    searchRef.current.focus()
+  }, [])
 
-    setPageDates(dates)
-  }, [page]);
+  useEffect(() => {
+    if (!inValidInput) {
+      onSearch(currentSearch)
+    }
+  }, [currentSearch])
+
+  const handleChange = (event) => setCurrentSearch(event.target.value)
+
 
   return (
     <Container>
-      <DatesTitle week={pageDates} formatter={formatDate} page={page} setPage={setPage} />
-      {pageDates.map(({name, dates }, index) =>
-        <Cells key={index}>
-          <WeekTitle name={name} />
-          {dates.map((date, i) => <Cell date={date} slot={slots[date.valueOf()]} user={USER} onAdd={onAdd} key={i} />)}
-        </Cells>
-      )}
-    </Container>
-  );
+      <div>
+        <Search ref={searchRef} value={currentSearch} onChange={handleChange} />
+      </div>
+      <div>
+        {inValidInput && <div>keyword has to be up to 3 characters</div>}
+        {!inValidInput && isEmpty && <div>No results found</div>}
+        {!inValidInput && !isEmpty &&
+          <div>
+              {groups.map(({title, author = {}}) =>
+              <div key={title} >
+                <div>Title: {title}</div>
+                <div><span>Author: {author.firstName}</span><span>Author: {author.surname}</span></div>
+              </div>)}
+            </div>}
+      </div>
+    </Container>)
 };
 
 export default App;
