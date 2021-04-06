@@ -7,7 +7,6 @@ export const reducer = (state, action) => {
   switch (action.type) {
     case "search":
       {
-        const groups = state.groups.slice()
         const newGroups = groups.filter(({ title }) =>
           title.toLowerCase().indexOf(action.search.toLowerCase()) > -1)
 
